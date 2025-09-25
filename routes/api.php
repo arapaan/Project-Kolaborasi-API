@@ -1,9 +1,15 @@
 <?php
 
-use App\Http\Controllers\BusinessController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\RegisterController;
 
+Route::post('/register', RegisterController::class);
+Route::post('/login', LoginController::class);
+Route::middleware('auth:sanctum')->post('/logout', LogoutController::class);
 Route::post("/business", BusinessController::class);
 Route::post("/products", ProductController::class);
