@@ -29,7 +29,7 @@ class RegisterController extends Controller
         $tokenResult = $user->createToken('auth_token');
         $token = $tokenResult->plainTextToken;
 
-        $tokenModel = $tokenResult->accesToken;
+        $tokenModel = $tokenResult->accessToken;
         $tokenModel->expires_at = Carbon::now()->addHour();
         $tokenModel->save();
 
