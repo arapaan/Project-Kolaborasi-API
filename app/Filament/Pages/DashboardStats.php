@@ -9,7 +9,13 @@ class DashboardStats extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-home';
     protected static string $view = 'filament.pages.custom-dashboard';
-    protected static ?string $title = 'Dashboard';
+    protected static ?string $navigationLabel = 'Dashboard';
+    public function getTitle(): string
+    {
+        $user = auth()->user();
+
+        return '👋 Welcome ' . ($user?->name ?? 'Guest');
+    }
 
     protected function getHeaderWidgets(): array
     {
