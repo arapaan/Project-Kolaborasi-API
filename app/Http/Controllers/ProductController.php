@@ -21,7 +21,7 @@ class ProductController extends Controller
             'business_id'   => $request->business_id
         ]);
 
-        return response([
+        return response()->json([
             'status'    => true,
             'message'   => 'Product successfully added',
             'data'      => $product,
