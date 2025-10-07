@@ -3,19 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrdersResource\Pages;
-use App\Filament\Resources\OrdersResource\RelationManagers;
+use App\Models\Order;
 use App\Models\Orders;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrdersResource extends Resource
 {
-    protected static ?string $model = Orders::class;
+    protected static ?string $model = Order::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
@@ -23,7 +21,38 @@ class OrdersResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name_customer')
+                    ->label('Nama Pelanggan')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('business_id')
+                    ->label('ID Bisnis')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('user_id')
+                    ->label('ID User')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\TextInput::make('total_price')
+                    ->label('Total Harga')
+                    ->numeric()
+                    ->required(),
+
+                Forms\Components\Select::make('status')
+                    ->label('Status Pesanan')
+                    ->options([
+                        'pending' => 'Pending',
+                        'processing' => 'Processing',
+                        'completed' => 'Completed',
+                        'cancelled' => 'Cancelled',
+
+                        
+                    ])
+                    ->default('pending') // 🔥 ini penting agar tidak error
+                    ->required(),
             ]);
     }
 
@@ -31,11 +60,13 @@ class OrdersResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('name_customer')->label('Pelanggan')->searchable(),
+                Tables\Columns\TextColumn::make('total_price')->label('Total'),
+                Tables\Columns\TextColumn::make('status')->badge(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -48,9 +79,7 @@ class OrdersResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
