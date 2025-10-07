@@ -39,7 +39,7 @@ class CategoryResource extends Resource
                     ->required(),
                 Select::make('parent_id')
                     ->label('Parent')
-                    ->options(Category::all()
+                    ->options(ModelsCategory::all()
                         ->pluck('name', 'id')
                         ->map(fn ($label) => $label ?? '-')
                     )
