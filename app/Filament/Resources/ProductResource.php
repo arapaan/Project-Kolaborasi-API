@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Business;
 use App\Models\category;
 
 class ProductResource extends Resource
@@ -32,6 +33,13 @@ class ProductResource extends Resource
                     ->label('Category')
                     ->options(category::all()
                         ->pluck('name', 'id')
+                        ->map(fn ($label) => $label ?? '-')
+                    )
+                    ->required(),
+                Select::make('business_id')
+                    ->label('Business')
+                    ->options(Business::all()
+                        ->pluck('name_company', 'id')
                         ->map(fn ($label) => $label ?? '-')
                     )
                     ->required(),
