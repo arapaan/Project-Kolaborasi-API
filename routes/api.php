@@ -7,7 +7,10 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
+<<<<<<< HEAD
 use App\Http\Controllers\OrderController;
+=======
+>>>>>>> feature/table-notifications
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\RegisterController;
@@ -22,5 +25,8 @@ Route::post("/business", BusinessController::class);
 Route::post("/products", ProductController::class);
 Route::post("/product-variant", ProductVariantController::class);
 Route::post("/roles", RoleController::class);
+<<<<<<< HEAD
 Route::post("/orders", OrderController::class);
+=======
+>>>>>>> feature/table-notifications
 Route::post("/notifications", NotificationController::class);
