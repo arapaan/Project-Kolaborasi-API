@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\OrdersResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrdersResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class OrdersResource extends Resource
 {
@@ -35,9 +36,20 @@ public static function form(Form $form): Form
             TextInput::make('total_price')
                 ->numeric()
                 ->required(),
-            Select::make('product')
+            Select::make('status')
+                ->options([
+                    'order'     => 'Order',
+                    'diproses'  => 'Di Proses',
+                    'selesai'   => 'Selesai' 
+                ])
+                ->required(),
+            SelectFilter::make('product')
                 ->multiple()
-                ->relationship('product', 'name'),
+                ->options([
+                    'Mie_ayam'          => 'Mie Ayam',
+                    'coffe'             => 'Kopi',
+                    'kebab_reguler'     => 'Kebab Reguler',
+                ])
         ]);
 }
 

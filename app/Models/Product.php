@@ -11,4 +11,14 @@ class Product extends Model
         'category_id',
         'business_id'
     ];
+
+    public function business()
+    {
+        return  $this->belongsTo(Business::class, 'business_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(category::class, 'category_id');
+    }
 }
