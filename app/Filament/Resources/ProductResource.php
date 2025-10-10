@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Business;
 use App\Models\category;
+use Filament\Tables\Columns\TextColumn;
 
 class ProductResource extends Resource
 {
@@ -31,17 +32,11 @@ class ProductResource extends Resource
                     ->required(),
                 Select::make('category_id')
                     ->label('Category')
-                    ->options(category::all()
-                        ->pluck('name', 'id')
-                        ->map(fn ($label) => $label ?? '-')
-                    )
+                    ->relationship('category', 'name')
                     ->required(),
                 Select::make('business_id')
                     ->label('Business')
-                    ->options(Business::all()
-                        ->pluck('name_company', 'id')
-                        ->map(fn ($label) => $label ?? '-')
-                    )
+                    ->relationship('business', 'name_company')
                     ->required(),
             ]);
     }
@@ -50,7 +45,21 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+                TextColumn::make('name')
+                    ->label('Nama')
+                    ->searchable()->sortable(),
+                TextColumn::make('quantity')
+                    ->label('Stok Product')
+                    ->searchable()->sortable(),
+                TextColumn::make('category.name')
+                    ->label('Category')
+                    ->searchable()->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Ditambahkan')
+                    ->searchable()->sortable(),
             ])
             ->filters([
                 //
