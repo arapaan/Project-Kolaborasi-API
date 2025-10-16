@@ -32,4 +32,20 @@ class OrderController extends Controller
             'data'      => $order
         ]);
     }
+
+    public function salesPerMonth()
+    {
+        $sales = Order::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $formatted = array_fill(1, 12, 0);
+        foreach ($sales as $s)
+            {
+                $formatted[$s->month] = (float) $s->total;
+            }
+        
+        return response()->json(array_values($formatted));
+    }
 }

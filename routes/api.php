@@ -24,5 +24,6 @@ Route::post("/products", ProductController::class);
 Route::post("/product-variant", ProductVariantController::class);
 Route::post("/roles", RoleController::class);
 Route::post("/orders", OrderController::class);
+Route::get('/sales-per-month', [OrderController::class, 'salesPerMonth']);
 Route::post("/notifications", NotificationController::class);
 Route::post("/discounts", DiscountController::class);
