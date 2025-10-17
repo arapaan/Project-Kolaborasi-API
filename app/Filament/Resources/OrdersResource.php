@@ -43,13 +43,11 @@ public static function form(Form $form): Form
                     'selesai'   => 'Selesai' 
                 ])
                 ->required(),
-            SelectFilter::make('product')
+            Select::make('products')
+                ->label('Products')
                 ->multiple()
-                ->options([
-                    'Mie_ayam'          => 'Mie Ayam',
-                    'coffe'             => 'Kopi',
-                    'kebab_reguler'     => 'Kebab Reguler',
-                ])
+                ->options(\App\Models\Product::pluck('name', 'id'))
+                ->required(),
         ]);
 }
 
@@ -66,12 +64,12 @@ public static function form(Form $form): Form
                     ->searchable()->sortable(),
                 TextColumn::make('total_price')
                     ->label('Total Harga')
-                    ->searchable()->sortable(),
-                TextColumn::make('product')
-                    ->label('Product')
-                    ->searchable()->sortable(),
+                    ->searchable()->sortable(),                
                 TextColumn::make('created_by')
                     ->label('Staff')
+                    ->searchable()->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Tanggal')
                     ->searchable()->sortable(),
             ])
             ->filters([
