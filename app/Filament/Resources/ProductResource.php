@@ -24,6 +24,13 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
+    protected static ?string $navigationGroup = 'Products';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('admin') || auth()->user()?->hasRole('employee');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
