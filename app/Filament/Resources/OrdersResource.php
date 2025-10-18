@@ -23,6 +23,13 @@ class OrdersResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
+    protected static ?string $navigationGroup = 'Orders & Notifications';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('admin') || auth()->user()?->hasRole('employee');
+    }
+
 public static function form(Form $form): Form
 {
     return $form

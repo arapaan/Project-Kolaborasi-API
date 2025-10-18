@@ -22,6 +22,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        
         return $panel
             ->default()
             ->id('admin')
@@ -52,10 +53,11 @@ class AdminPanelProvider extends PanelProvider
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
-                DispatchServingFilamentEvent::class,
+                DispatchServingFilamentEvent::class,                
             ])
             ->authMiddleware([
-                Authenticate::class,
+                \App\Http\Middleware\StaffOnly::class,
+                Authenticate::class,                
             ]);
     }
 }

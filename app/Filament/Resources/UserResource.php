@@ -15,12 +15,20 @@ use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected static ?string $navigationGroup = 'Roles & Permission';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('admin');
+    }
 
     public static function form(Form $form): Form
     {
@@ -33,6 +41,7 @@ class UserResource extends Resource
                     ->required(),
                 TextInput::make('password')
                     ->password()
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->revealable()
                     ->required(),
                 Select::make('role_id')

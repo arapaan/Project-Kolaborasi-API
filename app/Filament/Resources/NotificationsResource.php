@@ -18,6 +18,7 @@ class NotificationsResource extends Resource
     protected static ?string $navigationLabel = 'Notifications';
     protected static ?string $pluralLabel = 'Notifications';
     protected static ?string $slug = 'notifications';
+    protected static ?string $navigationGroup = 'Orders & Notifications';
 
     public static function form(Form $form): Form
     {
