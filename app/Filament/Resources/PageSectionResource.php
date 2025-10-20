@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PageSectionResource\Pages;
 use App\Filament\Resources\PageSectionResource\RelationManagers;
 use App\Models\Page;
+use Filament\Forms\Components\Hidden;
 
 class PageSectionResource extends Resource
 {
@@ -50,7 +51,7 @@ class PageSectionResource extends Resource
                     ->label('Order')
                     ->required(),
 
-                 Forms\Components\Group::make()
+                Forms\Components\Group::make()
                 ->schema(function ($get) {
                     $pageId = $get('page_id');
                     $page = Page::find($pageId);
@@ -62,7 +63,7 @@ class PageSectionResource extends Resource
                             TextInput::make('content.title1')->label('Title 1'),
                             TextInput::make('content.title2')->label('Title 2'),
                             TextInput::make('content.title3')->label('Title 3'),
-                            FileUpload::make('content.image')->label('Image')->directory('uploads/home'),
+                            FileUpload::make('file_path')->label('Image')->directory('public/images'),                                                                                
                             TextInput::make('content.subtitle')->label('Subtitle'),
                         ];
                     }
@@ -72,7 +73,7 @@ class PageSectionResource extends Resource
                         return [
                             TextInput::make('content.title1')->label('Title 1'),
                             Textarea::make('content.description')->label('Description'),
-                            FileUpload::make('content.image')->label('Image')->directory('uploads/about'),
+                            FileUpload::make('file_path')->label('Image')->directory('public/images'),
                         ];
                     }
 
