@@ -10,4 +10,9 @@ class Page extends Model
         'name',
         'slug',
     ];
+
+    public function sections()
+    {
+        return $this->hasMany(PageSection::class, 'page_id');
+    }
 }

@@ -22,6 +22,8 @@ class PageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Templates';
+
     public static function canAccess(): bool
     {
         return auth()->user()?->hasRole('admin');

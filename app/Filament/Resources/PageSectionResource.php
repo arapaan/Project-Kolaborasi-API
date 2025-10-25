@@ -18,12 +18,15 @@ use App\Filament\Resources\PageSectionResource\Pages;
 use App\Filament\Resources\PageSectionResource\RelationManagers;
 use App\Models\Page;
 use Filament\Forms\Components\Hidden;
+use Filament\Tables\Columns\TextColumn;
 
 class PageSectionResource extends Resource
 {
     protected static ?string $model = PageSection::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Templates';
 
     public static function canAccess(): bool
     {
@@ -39,9 +42,8 @@ class PageSectionResource extends Resource
                     ->relationship('page', 'name')
                     ->reactive()
                     ->afterStateUpdated(function ($state, callable $set) {
-                        // Ambil data page dari ID yang baru dipilih
                         $page = \App\Models\Page::find($state);
-                        $set('section_key', $page?->slug); // isi otomatis field section_key
+                        $set('section_key', $page?->slug);
                     })
                     ->required(),
                 TextInput::make('section_key')
@@ -85,6 +87,14 @@ class PageSectionResource extends Resource
                         ];
                     }
 
+                    // MENU PAGE
+                    if ($pageName == 'menu') {
+                        return [
+                            TextInput::make('content.title')->label('Title'),
+                            Textarea::make('content.description')->label('Description'),                            
+                        ];
+                    }
+
                     // Default (jika page belum dipilih)
                     return [
                         Forms\Components\Placeholder::make('note')
@@ -99,7 +109,15 @@ class PageSectionResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('page.name')
+                    ->label('Page')
+                    ->sortable()->searchable(),
+                TextColumn::make('section_key')
+                    ->label('Key')
+                    ->sortable()->searchable(),
+                TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->sortable()->searchable(),
             ])
             ->filters([
                 //
