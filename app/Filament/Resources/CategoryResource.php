@@ -44,8 +44,7 @@ class CategoryResource extends Resource
                     ->options(ModelsCategory::all()
                         ->pluck('name', 'id')
                         ->map(fn ($label) => $label ?? '-')
-                    )
-                    ->required(),
+                    ),
             ]);
     }
 

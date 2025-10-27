@@ -37,6 +37,9 @@ class ProductResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required(),
+                TextInput::make('quantity')
+                    ->required(),
+                TextInput::make('price'),
                 Select::make('category_id')
                     ->label('Category')
                     ->relationship('category', 'name')
@@ -45,6 +48,9 @@ class ProductResource extends Resource
                     ->label('Business')
                     ->relationship('business', 'name_company')
                     ->required(),
+                Select::make('discount_id')
+                    ->label('Discount')
+                    ->relationship('discount', 'discount'),
             ]);
     }
 

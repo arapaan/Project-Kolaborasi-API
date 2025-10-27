@@ -9,7 +9,9 @@ class Product extends Model
     protected $fillable = [
         'name',
         'category_id',
-        'business_id'
+        'business_id',
+        'quantity',
+        'price'
     ];
 
     public function business()
@@ -27,5 +29,10 @@ class Product extends Model
         return $this->belongsToMany(Order::class, 'order_product')
                 ->withPivot('quantity')
                 ->withTimestamps();
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class, 'discount_id');
     }
 }

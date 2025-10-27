@@ -31,4 +31,19 @@ class Order extends Model
                 ->withPivot('quantity')
                 ->withTimestamps();
     }
+
+    protected static function booted()
+{
+    static::created(function ($order) {
+        foreach ($order->products as $product) {
+            $product->decrement('quantity', $product->pivot->quantity);
+        }
+    });
+
+    static::deleted(function ($order) {
+        foreach ($order->products as $product) {
+            $product->increment('quantity', $product->pivot->quantity);
+        }
+    });
+}
 }

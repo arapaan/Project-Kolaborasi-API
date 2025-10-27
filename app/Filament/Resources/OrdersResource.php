@@ -9,13 +9,14 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\OrdersResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrdersResource\RelationManagers;
-use Filament\Tables\Filters\SelectFilter;
 
 class OrdersResource extends Resource
 {
@@ -30,6 +31,32 @@ class OrdersResource extends Resource
         return auth()->user()?->hasRole('admin') || auth()->user()?->hasRole('employee');
     }
 
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $total = 0;
+        if (!empty($data['products'])) {
+            foreach ($data['products'] as $productData) {
+                $price = $productData['price'] ?? 0;
+                $qty = $productData['quantity'] ?? 1;
+                $total += $price * $qty;
+            }
+        }
+
+        $data['total_price'] = $total;
+        return $data;
+    }
+
+    public static function afterCreate($record, array $data): void
+    {
+        if (!empty($data['products'])) {
+            foreach ($data['products'] as $productData) {
+                $record->products()->attach($productData['product_id'], [
+                    'quantity' => $productData['quantity'],
+                ]);
+            }
+        }
+    }
+
 public static function form(Form $form): Form
 {
     return $form
@@ -37,24 +64,65 @@ public static function form(Form $form): Form
             Select::make('business_id')
                 ->relationship('business', 'name_company')
                 ->required(),
+
             Select::make('user_id')
                 ->relationship('user', 'name')
-                ->required(),            
-            TextInput::make('total_price')
-                ->numeric()
                 ->required(),
+
             Select::make('status')
                 ->options([
                     'order'     => 'Order',
-                    'diproses'  => 'Di Proses',
-                    'selesai'   => 'Selesai' 
+                    'diproses'  => 'Diproses',
+                    'selesai'   => 'Selesai',
                 ])
                 ->required(),
-            Select::make('products')
-                ->label('Products')
-                ->multiple()
-                ->options(\App\Models\Product::pluck('name', 'id'))
-                ->required(),
+
+            Repeater::make('products')
+                ->label('Daftar Produk Dipesan')
+                ->schema([
+                    Select::make('product_id')
+                        ->label('Produk')
+                        ->relationship('products', 'name')
+                        ->required()
+                        ->reactive()
+                        ->afterStateUpdated(fn ($state, callable $set) =>
+                            $set('price', \App\Models\Product::find($state)?->price ?? 0)
+                        ),
+
+                    TextInput::make('price')
+                        ->label('Harga Satuan')
+                        ->numeric()
+                        ->disabled()
+                        ->dehydrated(),
+
+                    TextInput::make('quantity')
+                        ->label('Jumlah')
+                        ->numeric()
+                        ->default(1)
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $set, $get) {
+                            $set('total_price', ($get('price') ?? 0) * ($state ?? 0));
+                        }),
+
+                    TextInput::make('total_price')
+                        ->label('Subtotal')
+                        ->numeric()
+                        ->readOnly()
+                        ->dehydrated(),
+                ])
+                ->columns(3)
+                ->defaultItems(1)
+                ->createItemButtonLabel('Tambah Produk')
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) {
+                    $set('total_price', collect($state)->sum('total_price'));
+                }),
+            TextInput::make('total_price')
+                ->label('Total Harga')
+                ->numeric()
+                ->readOnly()
+                ->dehydrated()
+                ->default(0),
         ]);
 }
 

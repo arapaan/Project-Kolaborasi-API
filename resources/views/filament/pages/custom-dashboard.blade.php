@@ -1,4 +1,8 @@
 <x-filament-panels::page>
+    <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold">Laporan Tahunan {{ $year }}</h2>
+            <x-filament::button wire:click="downloadPdf">Download PDF</x-filament::button>
+    </div>
     <canvas id="myChart"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
