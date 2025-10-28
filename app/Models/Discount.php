@@ -11,4 +11,9 @@ class Discount extends Model
         'discount',
         'expires_date'
     ];
+
+    public function business()
+    {
+        return  $this->belongsTo(Business::class, 'business_id');
+    }
 }
