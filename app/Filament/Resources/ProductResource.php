@@ -10,13 +10,15 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Business;
-use App\Models\category;
+use App\Models\Category;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 
 class ProductResource extends Resource
 {
@@ -40,6 +42,16 @@ class ProductResource extends Resource
                 TextInput::make('quantity')
                     ->required(),
                 TextInput::make('price'),
+
+                // Tambahkan field upload / URL PNG di sini 👇
+                FileUpload::make('url_png')
+                    ->label('Product Image (PNG)')
+                    ->image()
+                    ->imagePreviewHeight('150')
+                    ->directory('products')
+                    ->nullable()
+                    ->columnSpanFull(),
+
                 Select::make('category_id')
                     ->label('Category')
                     ->relationship('category', 'name')
@@ -63,16 +75,22 @@ class ProductResource extends Resource
                     ->sortable(),
                 TextColumn::make('name')
                     ->label('Nama')
-                    ->searchable()->sortable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('quantity')
                     ->label('Stok Product')
-                    ->searchable()->sortable(),
+                    ->sortable(),
                 TextColumn::make('category.name')
                     ->label('Category')
-                    ->searchable()->sortable(),
+                    ->sortable(),
+                // Tampilkan gambar PNG di tabel
+                ImageColumn::make('url_png')
+                    ->label('Image')
+                    ->square(),
                 TextColumn::make('created_at')
                     ->label('Ditambahkan')
-                    ->searchable()->sortable(),
+                    ->dateTime('d M Y, H:i')
+                    ->sortable(),
             ])
             ->filters([
                 //
