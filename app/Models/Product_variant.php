@@ -12,4 +12,14 @@ class Product_variant extends Model
         'price',
         'business_id',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class, 'business_id');
+    }
 }
