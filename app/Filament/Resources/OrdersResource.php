@@ -80,7 +80,7 @@ public static function form(Form $form): Form
             Repeater::make('products')
                 ->label('Daftar Produk Dipesan')
                     ->reactive()
-                    ->required()li                               
+                    ->required()                               
                     ->dehydrated()
                 ->schema([
                     Select::make('product_id')

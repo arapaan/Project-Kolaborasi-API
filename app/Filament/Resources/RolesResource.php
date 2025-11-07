@@ -24,7 +24,7 @@ class RolesResource extends Resource
 
     protected static ?string $navigationGroup = 'Roles & Permission';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shield-exclamation';
 
     public static function canAccess(): bool
     {

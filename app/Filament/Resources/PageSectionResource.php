@@ -24,7 +24,7 @@ class PageSectionResource extends Resource
 {
     protected static ?string $model = PageSection::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
     protected static ?string $navigationGroup = 'Templates';
 

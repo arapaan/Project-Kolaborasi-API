@@ -37,7 +37,7 @@ class DashboardStats extends Page
     }
 
     public function generateReport()
-    {
+    {        
         $year = $this->year;
 
         $this->reportData = [
@@ -54,12 +54,22 @@ class DashboardStats extends Page
                 ->join('products', 'order_product.product_id', '=', 'products.id')
                 ->select('products.name', DB::raw('SUM(order_product.quantity) as total_sold'))
                 ->groupBy('products.name')
-                ->get(),
+                ->get()
+                ->toArray(),
         ];
+
+        // dd($this->reportData);
     }
 
     public function downloadPdf()
     {
+        // logger('=== MULAI DOWNLOAD PDF ===');
+        // $this->generateReport();
+        // logger('DATA REPORT:', [
+        //     'reportData' => $this->reportData,
+        //     'year'  => $this->year,
+        // ]);
+
         $pdf = Pdf::loadView('filament.pages.annual-report', [
             'data' => $this->reportData,
             'year' => $this->year,

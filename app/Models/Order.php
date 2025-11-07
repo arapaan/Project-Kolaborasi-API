@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -12,7 +13,6 @@ class Order extends Model
         'created_by',
         'status',
         'total_price',
-        'product'
     ];
 
     public function business()
@@ -28,12 +28,12 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'order_product')
-                ->withPivot('quantity')
+                ->withPivot(['quantity'])
                 ->withTimestamps();
     }
 
     protected static function booted()
-{
+    {
     static::created(function ($order) {
         foreach ($order->products as $product) {
             $product->decrement('quantity', $product->pivot->quantity);

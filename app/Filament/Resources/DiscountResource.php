@@ -2,22 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DiscountResource\Pages;
-use App\Models\Discount;
 use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Discount;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use App\Filament\Resources\DiscountResource\Pages;
 
 class DiscountResource extends Resource
 {
     protected static ?string $model = Discount::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-percent-badge';
     protected static ?string $navigationGroup = 'Products';
 
     public static function canAccess(): bool
@@ -45,7 +46,14 @@ class DiscountResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([])
+            ->columns([
+                TextColumn::make('id')
+                    ->label('Id Discount'),
+                TextColumn::make('discount')
+                    ->label('Potongan'),
+                TextColumn::make('expires_date')
+                    ->label('Tanggal Kadaluwarsa'),
+            ])
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),

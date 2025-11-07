@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Order;
+use App\Models\Business;
+use App\Models\category;
+use App\Models\Discount;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -27,8 +31,8 @@ class Product extends Model
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_product')
-                ->withPivot('quantity')
-                ->withTimestamps();
+                    ->withPivot('quantity')
+                    ->withTimestamps();
     }
 
     public function discount()
