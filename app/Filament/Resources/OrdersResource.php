@@ -79,29 +79,47 @@ public static function form(Form $form): Form
 
             Repeater::make('products')
                 ->label('Daftar Produk Dipesan')
+                    ->reactive()
+                    ->required()li                               
+                    ->dehydrated()
                 ->schema([
                     Select::make('product_id')
                         ->label('Produk')
                         ->relationship('products', 'name')
                         ->required()
-                        ->reactive()
-                        ->afterStateUpdated(fn ($state, callable $set) =>
-                            $set('price', \App\Models\Product::find($state)?->price ?? 0)
-                        ),
+                            ->afterStateUpdated(function ($state, callable $set, $get) {
+                                $price = \App\Models\Product::find($state)?->price ?? 0;
+                                $set('price', $price);
+
+                                // Hitung subtotal saat produk diganti
+                                $quantity = $get('quantity') ?? 1;
+                                $set('total_price', $price * $quantity);
+
+                                // Update total luar
+                                $set('../../total_price', collect($get('../../products') ?? [])
+                                    ->sum('total_price'));
+                            }),
 
                     TextInput::make('price')
                         ->label('Harga Satuan')
                         ->numeric()
                         ->disabled()
-                        ->dehydrated(),
+                            ->dehydrated(false),
 
                     TextInput::make('quantity')
                         ->label('Jumlah')
                         ->numeric()
+                            ->minValue(1)
                         ->default(1)
                         ->reactive()
                         ->afterStateUpdated(function ($state, callable $set, $get) {
-                            $set('total_price', ($get('price') ?? 0) * ($state ?? 0));
+                                // Hitung subtotal per produk
+                                $subtotal = ($get('price') ?? 0) * ($state ?? 0);
+                                $set('total_price', $subtotal);
+
+                                // ✅ Update total luar (semua subtotal dijumlah)
+                                $set('../../total_price', collect($get('../../products') ?? [])
+                                    ->sum('total_price'));
                         }),
 
                     TextInput::make('total_price')
@@ -110,13 +128,24 @@ public static function form(Form $form): Form
                         ->readOnly()
                         ->dehydrated(),
                 ])
+                    ->mutateDehydratedStateUsing(function ($state) {
+                        return collect($state ?? [])
+                            ->map(function ($item) {
+                                return [
+                                    'product_id'   => $item['product_id'] ?? null,
+                                    'quantity'     => isset($item['quantity']) ? (int)$item['quantity'] : 1,
+                                    'price'        => $item['price'] ?? 0,
+                                    'total_price'  => $item['total_price'] ?? 0,
+                                ];
+                            })
+                            ->filter(fn($i) => $i['product_id'] !== null)
+                            ->values()
+                            ->toArray();
+                    })
                 ->columns(3)
                 ->defaultItems(1)
-                ->createItemButtonLabel('Tambah Produk')
-                ->reactive()
-                ->afterStateUpdated(function ($state, callable $set) {
-                    $set('total_price', collect($state)->sum('total_price'));
-                }),
+                    ->createItemButtonLabel('Tambah Produk'),
+
             TextInput::make('total_price')
                 ->label('Total Harga')
                 ->numeric()
