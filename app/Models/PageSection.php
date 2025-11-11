@@ -23,4 +23,9 @@ class PageSection extends Model
     {
         return $this->belongsTo(Page::class);
     }
+
+    public function getFilePathAttribute($value)
+    {
+        return $value ? asset('storage/' . $value) : null;
+    }
 }

@@ -65,7 +65,7 @@ class PageSectionResource extends Resource
                             TextInput::make('content.title1')->label('Title 1'),
                             TextInput::make('content.title2')->label('Title 2'),
                             TextInput::make('content.title3')->label('Title 3'),
-                            FileUpload::make('file_path')->label('Image')->directory('public/images'),                                                                                
+                            FileUpload::make('file_path')->label('Image')->directory('images')->visibility('public')->getUploadedFileNameForStorageUsing(fn ($file) => $file->getClientOriginalName()),                                                                                
                             TextInput::make('content.subtitle')->label('Subtitle'),
                         ];
                     }
