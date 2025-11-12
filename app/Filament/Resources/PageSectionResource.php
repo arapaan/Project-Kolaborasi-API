@@ -73,8 +73,14 @@ class PageSectionResource extends Resource
                     // ABOUT PAGE
                     if ($pageName == 'about') {
                         return [
-                            TextInput::make('content.title1')->label('Title 1'),
-                            Textarea::make('content.description')->label('Description'),
+                            TextInput::make('content.title1')->label('Title1'),
+                            TextInput::make('content.title2')->label('Title2'),
+                            TextInput::make('content.title3')->label('Title3'),
+                            TextInput::make('content.title4')->label('Title4'),
+                            Textarea::make('content.description1')->label('Description1'),                            
+                            Textarea::make('content.description2')->label('Description2'),
+                            Textarea::make('content.description3')->label('Description3'),
+                            Textarea::make('content.description4')->label('Description4'),                        
                             FileUpload::make('file_path')->label('Image')->directory('public/images'),
                         ];
                     }
@@ -82,7 +88,7 @@ class PageSectionResource extends Resource
                     // DISCOUNT PAGE
                     if ($pageName == 'discount') {
                         return [
-                            TextInput::make('content.title1')->label('Title 1'),
+                            TextInput::make('content.title')->label('Title'),
                             Textarea::make('content.description')->label('Description'),                            
                         ];
                     }
@@ -91,7 +97,7 @@ class PageSectionResource extends Resource
                     if ($pageName == 'menu') {
                         return [
                             TextInput::make('content.title')->label('Title'),
-                            Textarea::make('content.description')->label('Description'),                            
+                            Textarea::make('content.description')->label('Description'),
                         ];
                     }
 
