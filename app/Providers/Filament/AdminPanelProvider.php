@@ -29,7 +29,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             // ->viteTheme('resources/css/filament.css')
             ->login()
-            ->brandName('') #letak Menambahkan Logo            
+            ->brandName('Variisha') #letak Menambahkan Logo   
+            ->brandLogo(asset('storage/dummy.jpg'))
+            ->brandLogoHeight('2 rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
