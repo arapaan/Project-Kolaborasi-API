@@ -7,6 +7,25 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function show($category) 
+    {
+        $product = Product::where('category_id', $category)
+                    ->with('category')
+                    ->get();
+        if(!$product) {
+            return response()->json([
+                'status'    => 'error',
+                'message'   => 'product Not Found',
+            ]);
+        }
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Product retrieved successfully',
+            'data'      => $product
+        ]);
+    }
+
     public function __invoke(Request $request)
     {
         $request->validate([

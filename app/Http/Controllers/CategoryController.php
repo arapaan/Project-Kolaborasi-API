@@ -29,4 +29,21 @@ class CategoryController extends Controller
             'data'      => $category
         ]);
     }
+
+    public function index() 
+    {
+        $product = category::get();
+        if(!$product) {
+            return response()->json([
+                'status'    => 'error',
+                'message'   => 'product Not Found',
+            ]);
+        }
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Product retrieved successfully',
+            'data'      => $product
+        ]);
+    }
 }

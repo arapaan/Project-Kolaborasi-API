@@ -19,10 +19,13 @@ Route::post('/register', RegisterController::class);
 Route::post('/login', LoginController::class);
 Route::middleware('auth:sanctum')->post('/logout', LogoutController::class);
 Route::post("/category", CategoryController::class);
+Route::get("/categories", [CategoryController::class, "index"]);
 
-Route::post("/business", BusinessController::class);
+Route::get("/business/{name}", [BusinessController::class, 'show']);
 Route::post("/products", ProductController::class);
+Route::get("/products/{category}", [ProductController::class, 'show']);
 Route::post("/product-variant", ProductVariantController::class);
+Route::get("/product-variant/{product}", [ProductVariantController::class, "show"]);
 Route::post("/roles", RoleController::class);
 Route::post("/orders", OrderController::class);
 Route::get('/sales-per-month', [OrderController::class, 'salesPerMonth']);

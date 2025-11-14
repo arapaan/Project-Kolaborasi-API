@@ -7,6 +7,23 @@ use Illuminate\Http\Request;
 
 class ProductVariantController extends Controller
 {
+    public function show ($product) {
+        $productV = Product_variant::where('product_id', $product)
+                    ->with('product')
+                    ->get();
+        if(!$productV) {
+            return response()->json([
+                'status'    => 'Error',
+                'message'   => 'Product Variant Not Found'
+            ]);
+        }
+        return response()->json([
+            'status'    => 'Success',
+            'message'   => 'Product Variant retrieved successfully',
+            'data'      => $productV
+        ]);
+    }
+
     public function __invoke(Request $request)
     {
         $request->validate([

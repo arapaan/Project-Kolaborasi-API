@@ -7,28 +7,21 @@ use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
-    public function __invoke(Request $request)
-    {
-        $request->validate([
-            'name_company'  => ['required', 'string', 'min:3'],
-            'email'         => ['required', 'email'],            
-            'phone'         => ['required', 'integer'],
-            'address'       => ['required', 'string'],
-            'logo_url'      => ['url'],
-        ]);
+    public function show($name) {
+        $business = Business::where('name_company', $name)
+                    ->first();
 
-        $Business = Business::create([
-            'name_company'  => $request->name_company,
-            'email'         => $request->email,            
-            'phone'         => $request->phone,
-            'address'       => $request->address,
-            'logo_url'      => $request->logo_url,
-        ]);
+        if(!$business) {
+            return response()->json([
+                'status'    =>  'error',
+                'message'   =>  'Business Not Found',
+            ]);
+        }
 
-        return response([
-            'status'    => true,
-            'message'   => 'Business successfully added',
-            'data'      => $Business
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Business retrieved successfully',
+            'data'      => $business
         ]);
     }
 }
