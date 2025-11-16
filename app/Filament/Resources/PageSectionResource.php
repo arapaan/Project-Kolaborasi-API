@@ -81,7 +81,7 @@ class PageSectionResource extends Resource
                             Textarea::make('content.description2')->label('Description2'),
                             Textarea::make('content.description3')->label('Description3'),
                             Textarea::make('content.description4')->label('Description4'),                        
-                            FileUpload::make('file_path')->label('Image')->directory('public/images'),
+                            FileUpload::make('file_path')->label('Image')->directory('images'),
                         ];
                     }
 
@@ -98,6 +98,17 @@ class PageSectionResource extends Resource
                         return [
                             TextInput::make('content.title')->label('Title'),
                             Textarea::make('content.description')->label('Description'),
+                        ];
+                    }
+
+                    // FEEDBACK PAGE
+                    if ($pageName == 'feedback') {
+                        return [
+                            TextInput::make('content.title')->label('Title'),
+                            TextInput::make('content.subtitle1')->label('subtitle'),
+                            TextInput::make('content.subtitle2')->label('subtitle2'),
+                            TextInput::make('content.subtitle3')->label('subtitle3'),
+                            FileUpload::make('file_path')->label('Image')->directory('images'),
                         ];
                     }
 

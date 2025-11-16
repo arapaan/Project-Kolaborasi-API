@@ -18,13 +18,13 @@ class RegisterController extends Controller
             'name'      => ['required', 'string'],
             'email'     => ['required', 'email', 'string'],
             'password'  => ['required'],
-            'role_id'   => ['required'],
+            'role'      => ['required'],    
         ]);
 
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,
-            'role_id'   => $request->role_id,
+            'role'      => $request->role,
             'password'  => Hash::make($request->password),
         ]);
 

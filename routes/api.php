@@ -2,18 +2,25 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductVariantController;
+
+Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
+    return response()->json([
+        'status' => 'Success',
+        'user'   => $request->user(),
+    ]);
+});
 
 Route::post('/register', RegisterController::class);
 Route::post('/login', LoginController::class);
