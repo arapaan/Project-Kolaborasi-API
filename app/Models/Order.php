@@ -13,6 +13,7 @@ class Order extends Model
         'created_by',
         'status',
         'total_price',
+         'staff_id',
     ];
 
     public function business()
