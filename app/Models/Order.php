@@ -33,6 +33,12 @@ class Order extends Model
                 ->withTimestamps();
     }
 
+    public function staff()
+   {
+    return $this->belongsTo(User::class, 'staff_id');
+   }
+
+
     protected static function booted()
     {
     static::created(function ($order) {
@@ -46,5 +52,6 @@ class Order extends Model
             $product->increment('quantity', $product->pivot->quantity);
         }
     });
+    
 }
 }
