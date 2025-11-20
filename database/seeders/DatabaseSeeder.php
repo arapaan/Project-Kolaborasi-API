@@ -16,16 +16,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
         $business = Business::firstOrCreate([
             'name_company'  => 'Sultan Java',
             'email'         => 'SultanJava@gmail.com',
             'phone'         => 6283838402905,
             'address'        => 'Pasar Kembangsari, Kec. Tengaran, Kabupaten Semarang, Jawa Tengah',
         ]); 
-        $adminRole = Role::firstOrCreate(['name' => 'admin', 'business_id' => 1]);
-        $employeeRole = Role::firstOrCreate(['name' => 'employee', 'business_id' => 1]);
-        $customerRole = Role::firstOrCreate(['name' => 'customer', 'business_id' => 1]);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'business_id' => 1, 'guard_name' => 'web']);
+        $employeeRole = Role::firstOrCreate(['name' => 'employee', 'business_id' => 1, 'guard_name' => 'web']);
+        $customerRole = Role::firstOrCreate(['name' => 'customer', 'business_id' => 1, 'guard_name' => 'web']);
 
          $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],

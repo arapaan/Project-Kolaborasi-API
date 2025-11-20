@@ -48,7 +48,7 @@ class ProductResource extends Resource
                     ->label('Product Image (PNG)')
                     ->image()
                     ->imagePreviewHeight('150')
-                    ->directory('products')
+                    ->directory('images')
                     ->nullable()
                     ->columnSpanFull(),
 
