@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $business = Business::firstOrCreate([
-            'name_company'  => 'Sultan Java',
-            'email'         => 'SultanJava@gmail.com',
+            'name_company'  => 'Variisha Bakery',
+            'email'         => 'Variisha@gmail.com',
             'phone'         => 6283838402905,
             'address'        => 'Pasar Kembangsari, Kec. Tengaran, Kabupaten Semarang, Jawa Tengah',
         ]); 
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
          $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
             [
-                'name' => 'Arfan',
+                'name' => 'Aliya',
                 'password' => bcrypt('13456789'),
             ]
         );
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $employee = User::firstOrCreate(
             ['email' => 'employee@gmail.com'],
             [
-                'name' => 'Budi',
+                'name' => 'Tyas',
                 'password' => bcrypt('13456789'),
             ]
         );
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         $customer = User::firstOrCreate(
             ['email' => 'customer@gmail.com'],
             [
-                'name' => 'Aly',
+                'name' => 'miaw',
                 'password' => bcrypt('13456789'),
             ]
         );

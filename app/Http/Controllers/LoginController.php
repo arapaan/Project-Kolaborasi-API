@@ -17,7 +17,6 @@ class LoginController extends Controller
         $request->validate([
             'email'     => 'required|email',
             'password'  => 'required',
-            'role' => 'required',
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -29,12 +28,12 @@ class LoginController extends Controller
 
         $user = Auth::user();
 
-        if ($user->role !== $request->role) {
-            return response()->json([
-                'status'    => 'Error',
-                'message'   => 'Role Mismatch',
-            ], 401);
-        }
+        // if ($user->role !== $request->role) {
+        //     return response()->json([
+        //         'status'    => 'Error',
+        //         'message'   => 'Role Mismatch',
+        //     ], 401);
+        // }
         
         $user->tokens()->delete();        
 

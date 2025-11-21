@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductVariantController;
@@ -29,7 +30,7 @@ Route::post("/category", CategoryController::class);
 Route::get("/categories", [CategoryController::class, "index"]);
 
 Route::get("/business/{name}", [BusinessController::class, 'show']);
-Route::post("/products", ProductController::class);
+Route::get("/products", [ProductController::class,'index']);
 Route::get("/products/{category}", [ProductController::class, 'show']);
 Route::post("/product-variant", ProductVariantController::class);
 Route::get("/product-variant/{product}", [ProductVariantController::class, "show"]);
@@ -40,3 +41,6 @@ Route::post("/notifications", NotificationController::class);
 Route::post("/discounts", DiscountController::class);
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{slug}', [PageController::class, 'show']);
+Route::get('/order-status/{orderId}', [OrderController::class, 'status']);
+
+Route::post('/feedback',FeedbackController::class);

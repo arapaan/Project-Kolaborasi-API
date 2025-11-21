@@ -7,6 +7,23 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function index(){
+
+        try {
+             $product = Product::with(['category','discount','business'])->get();
+
+             return response()->json([
+                'status' => 'success',
+                'data' => $product
+             ],200);
+        } catch (\Exception $e) {
+
+             return response()->json([
+                'status' => 'error',
+                'message' => $e
+             ],500);
+        }
+    }
     public function show($category) 
     {
         $product = Product::where('category_id', $category)

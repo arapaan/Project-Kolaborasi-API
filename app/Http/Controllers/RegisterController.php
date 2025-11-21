@@ -24,8 +24,8 @@ class RegisterController extends Controller
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,
-            'role'      => $request->role,
             'password'  => Hash::make($request->password),
+            'role'      => $request->role
         ]);
 
         $tokenResult = $user->createToken('auth_token');

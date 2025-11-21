@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
+        'url_png',
         'name',
         'category_id',
         'business_id',
@@ -27,6 +28,11 @@ class Product extends Model
     {
         return $this->belongsTo(category::class, 'category_id');
     }
+    public function products()
+{
+    return $this->belongsToMany(Product::class)->withPivot('quantity');
+}
+
 
     public function orders()
     {
