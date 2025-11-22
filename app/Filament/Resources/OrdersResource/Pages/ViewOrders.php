@@ -9,7 +9,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Infolist;
 
-class ViewTransaction extends ViewRecord
+class ViewOrders extends ViewRecord
 {
     protected static string $resource = OrdersResource::class;
 

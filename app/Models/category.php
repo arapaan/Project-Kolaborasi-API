@@ -12,3 +12,4 @@ class category extends Model
         'business_id'
     ];
 }
+
