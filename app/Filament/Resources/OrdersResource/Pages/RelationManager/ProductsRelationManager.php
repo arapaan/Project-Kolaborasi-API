@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\OrdersResource\ProductsRelationManager;
+namespace App\Filament\Resources\OrdersResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
@@ -20,29 +20,30 @@ class ProductsRelationManager extends RelationManager
         return $form->schema([]);
     }
 
-    public function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                TextColumn::make('name')
-                    ->label('Nama Produk')
-                    ->searchable(),
+     public function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            TextColumn::make('name')
+                ->label('Nama Produk')
+                ->searchable(),
 
-                TextColumn::make('pivot.quantity')
-                    ->label('Jumlah')
-                    ->sortable(),
+            TextColumn::make('pivot.quantity')
+                ->label('Jumlah'),
 
-                TextColumn::make('pivot.price')
-                    ->label('Harga Satuan')
-                    ->money('IDR')
-                    ->sortable(),
+            TextColumn::make('price')
+                ->label('Harga Satuan')
+                ->money('IDR'),
 
-                TextColumn::make('pivot.total_price')
-                    ->label('Subtotal')
-                    ->money('IDR')
-                    ->sortable(),
-            ])
-            ->headerActions([]) // tidak bisa tambah dari sini
-            ->actions([]);      // tidak bisa edit/hapus dari sini
-    }
+            TextColumn::make('subtotal')
+                ->label('Subtotal')
+                ->money('IDR')
+                ->getStateUsing(function ($record) {
+                    return $record->price * $record->pivot->quantity;
+                }),
+        ])
+        ->headerActions([])
+        ->actions([]);
+}
+
 }

@@ -17,7 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\OrdersResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrdersResource\RelationManagers;
-use App\Filament\Resources\OrderResource\RelationManagers\ProductsRelationManager;
+use App\Filament\Resources\OrdersResource\RelationManagers\ProductsRelationManager;
+
 
 
 class OrdersResource extends Resource
@@ -194,7 +195,7 @@ public static function form(Form $form): Form
     public static function getRelations(): array
     {
         return [
-            ProductsRelationManager::class,
+           RelationManagers\ProductsRelationManager::class,
         ];
     }
 
