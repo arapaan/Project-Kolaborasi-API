@@ -43,10 +43,20 @@ class ProductResource extends Resource
 
                 // Jumlah produk
                 TextInput::make('quantity')
-                    ->label('Quantity')
-                    ->numeric()
-                    ->required()
-                    ->minValue(0),
+                     ->label('Quantity')
+                     ->numeric()
+                     ->required()
+                     ->reactive()
+                     ->afterStateUpdated(function ($state, callable $set) {
+                    if ($state !== null && $state !== '') {
+                      // Saat user ketik angka, langsung tempel "000"
+                    // Tapi jangan tempel dua kali jika user sudah mengetik nolnya
+                    if (!str_ends_with($state, '000')) {
+                      $set('quantity', $state . '000');
+            }
+        }
+    }),
+
 
                 // Upload file (gambar produk / asset)
                 FileUpload::make('url')
@@ -65,7 +75,12 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Name'),
                 Tables\Columns\TextColumn::make('category.name')->label('Category'),
-                Tables\Columns\TextColumn::make('quantity')->label('Quantity'),
+
+                // Tampilkan quantity secara "manusiawi" (bagi 1000)
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label('Quantity')
+                    ->formatStateUsing(fn ($state) => is_numeric($state) ? intval($state / 1000) : $state),
+
                 Tables\Columns\ImageColumn::make('url')->label('Image'),
             ])
             ->filters([
