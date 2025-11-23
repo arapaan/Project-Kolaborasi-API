@@ -20,30 +20,37 @@ class ProductsRelationManager extends RelationManager
         return $form->schema([]);
     }
 
-     public function table(Table $table): Table
-{
-    return $table
-        ->columns([
-            TextColumn::make('name')
-                ->label('Nama Produk')
-                ->searchable(),
+    public function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('name')
+                    ->label('Nama Produk')
+                    ->searchable(),
 
-            TextColumn::make('pivot.quantity')
-                ->label('Jumlah'),
+                TextColumn::make('pivot.quantity')
+                    ->label('Jumlah'),
 
-            TextColumn::make('price')
-                ->label('Harga Satuan')
-                ->money('IDR'),
+                // HARGA SATUAN (format Rupiah)
+                TextColumn::make('price')
+                    ->label('Harga Satuan')
+                    ->formatStateUsing(fn($state) =>
+                        'Rp ' . number_format((float) $state, 0, ',', '.')
+                    ),
 
-            TextColumn::make('subtotal')
-                ->label('Subtotal')
-                ->money('IDR')
-                ->getStateUsing(function ($record) {
-                    return $record->price * $record->pivot->quantity;
-                }),
-        ])
-        ->headerActions([])
-        ->actions([]);
-}
+                // SUBTOTAL (format Rupiah)
+                TextColumn::make('subtotal')
+                    ->label('Subtotal')
+                    ->getStateUsing(fn ($record) =>
+                        (float) $record->price * (int) $record->pivot->quantity
+                    )
+                    ->formatStateUsing(fn($state) =>
+                        'Rp ' . number_format((float) $state, 0, ',', '.')
+                    ),
 
+            ])
+            ->headerActions([])
+            ->actions([])
+            ->paginated(false);
+    }
 }
