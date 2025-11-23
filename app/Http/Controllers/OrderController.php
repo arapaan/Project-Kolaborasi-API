@@ -33,11 +33,20 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json([
-            'status'  => true,
-            'message' => 'Order successfully added',
-            'data'    => $order->load('products'),
-        ], 201);
+            return response()->json([
+            'id' => $order->id,
+            'items' => $order->products->map(fn ($p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'qty' => $p->pivot->quantity,
+                'price' => $p->price,
+            ]),
+            'itemCount' => $order->products->sum(fn ($p) => $p->pivot->quantity),
+            'eta' => '30 Menit',
+            'status_code' => $order->status,
+            'status_name' => $order->status_label,
+]);
+
     }
 
 

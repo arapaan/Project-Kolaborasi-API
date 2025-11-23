@@ -33,6 +33,17 @@ class Order extends Model
                 ->withTimestamps();
     }
 
+            public function getStatusLabelAttribute()
+        {
+            return [
+                0 => 'Pesanan Masuk',
+                1 => 'Sedang Diproses',
+                2 => 'Dalam Pengiriman',
+                3 => 'Selesai'
+            ][$this->status] ?? 'Tidak Diketahui';
+        }
+
+
     public function staff()
    {
     return $this->belongsTo(User::class, 'staff_id');
