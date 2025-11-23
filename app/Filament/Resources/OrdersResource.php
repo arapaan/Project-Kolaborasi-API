@@ -76,6 +76,7 @@ public static function form(Form $form): Form
                 ->options([
                     'order'     => 'Order',
                     'diproses'  => 'Diproses',
+                    'diantar'  => 'Diantar',
                     'selesai'   => 'Selesai',
                 ])
                 ->required(),
