@@ -33,6 +33,7 @@ class RegisterController extends Controller
 
         $tokenModel = $tokenResult->accessToken;
         $tokenModel->expires_at = Carbon::now()->addHour();
+        
         $tokenModel->save();
 
         return response()->json([

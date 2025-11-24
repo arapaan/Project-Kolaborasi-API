@@ -34,9 +34,15 @@ Route::get("/products/{category}", [ProductController::class, 'show']);
 Route::post("/product-variant", ProductVariantController::class);
 Route::get("/product-variant/{product}", [ProductVariantController::class, "show"]);
 Route::post("/roles", RoleController::class);
-Route::post("/orders", OrderController::class);
+Route::middleware('auth:sanctum')->post("/orders", OrderController::class);
 Route::get('/sales-per-month', [OrderController::class, 'salesPerMonth']);
 Route::post("/notifications", NotificationController::class);
 Route::post("/discounts", DiscountController::class);
 Route::get('/pages', [PageController::class, 'index']);
 Route::get('/pages/{slug}', [PageController::class, 'show']);
+Route::post('/midtrans/token', [OrderController::class, 'createSnapToken']);
+Route::post('/midtrans/notification', [OrderController::class, 'handleNotification']);
+Route::post('/midtrans/callback', [OrderController::class, 'handleNotification']);
+Route::middleware('auth:sanctum')->get('/orders/me', [OrderController::class, 'userOrders']);
+
+

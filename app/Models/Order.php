@@ -13,7 +13,10 @@ class Order extends Model
         'created_by',
         'status',
         'total_price',
-         'staff_id',
+    ];
+
+    protected $casts = [
+        'details' => 'array',
     ];
 
     public function business()

@@ -14,6 +14,8 @@ return new class extends Migration
                 ->after('status')
                 ->constrained('users')
                 ->nullOnDelete();
+            $table->dropForeign(['staff_id']);
+            $table->dropColumn('staff_id');
         });
     }
 
