@@ -30,17 +30,16 @@ class OrderController extends Controller
             'details'       => json_encode($request->details), // json
         ]);
 
-        $pivotData = [];
+        $productsData = [];
         foreach ($request->products as $p) {
-            $pivotData[$p['product_id']] = [
+            $productsData[$p['product_id']] = [
                 'quantity'   => $p['quantity'] ?? 1,
-                'created_at' => now(),
-                'updated_at' => now()
+                'final_price' => $p['final_price'],
+                'variant_name' => $p['variant_name'],
             ];
         }
 
-        $order->products()->attach($pivotData);
-        $order->load('products');
+        $order->products()->attach($productsData);
 
         return response()->json([
             'status'    => 'Success',
@@ -75,25 +74,38 @@ class OrderController extends Controller
         ], 404);
 
         $item = [];
-        foreach ($order->products as $p) {
+         foreach ($order->products as $p) {
+
+            // FINAL PRICE SEHARUSNYA ADA DI PIVOT
+            $finalPrice = $p->pivot->final_price ?? $p->price;
+
             $items[] = [
                 'id'        => $p->id,
-                'price'     => $p->price,
+                'price'     => $finalPrice,
                 'quantity'  => $p->pivot->quantity,
-                'name'      => $p->name,
+                'name'      => $p->name . ($p->pivot->variant_name ? " ({$p->pivot->variant_name})" : ""),
             ];
-        }
+        }            
 
-        $params = [
+         $params = [
             'transaction_details' => [
-                'order_id' => $request->order_id,
-                'gross_amount' => $request->total_price,
+                'order_id' => $order->id,
+                'gross_amount' => intval($request->total_price),
             ],
-            'item_details'     => $items,
+            'item_details' => [
+                [
+                    'id'        => 'ORDER-' . $order->id,
+                    'price'     => intval($request->total_price), // harga final 29.000
+                    'quantity'  => 1,
+                    'name'      => 'Pembayaran Pesanan #' . $order->id,
+                ]
+            ],
             'customer_details' => $request->user ?? [],
         ];
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        \Log::info("MIDTRANS PARAMS", $params);
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);        
 
         return response()->json([
             'token' => $snapToken,
@@ -166,13 +178,32 @@ class OrderController extends Controller
 
     public function userOrders(Request $request)
     {
-        \Log::error("USERS ORDERS: ", $request->all());
         $orders = Order::where('user_id', $request->user()->id)
-                ->with('products')
+                ->with(['products' => function($query) {
+                    $query->withPivot(['quantity', 'final_price', 'variant_name']);
+                }])
+                ->orderBy('created_at', 'desc')
                 ->get();
 
         return response()->json([
             'orders' => $orders,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+        
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+    
+        $order->status = $request->status;
+        $order->save();
+    
+        return response()->json([
+            'message' => 'Order status updated successfully',
+            'data' => $order
         ]);
     }
 }

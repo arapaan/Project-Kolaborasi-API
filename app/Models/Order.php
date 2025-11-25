@@ -32,7 +32,7 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'order_product')
-                ->withPivot(['quantity'])
+                ->withPivot(['quantity', 'final_price', 'variant_name'])
                 ->withTimestamps();
     }
 
@@ -42,19 +42,15 @@ class Order extends Model
    }
 
 
-    protected static function booted()
+   protected static function booted()
     {
-    static::created(function ($order) {
-        foreach ($order->products as $product) {
-            $product->decrement('quantity', $product->pivot->quantity);
-        }
-    });
-
-    static::deleted(function ($order) {
-        foreach ($order->products as $product) {
-            $product->increment('quantity', $product->pivot->quantity);
-        }
-    });
-    
-}
+        static::created(function ($order) {
+            \Log::info("Order created - ID: {$order->id}");
+            
+            foreach ($order->products as $product) {
+                \Log::info("Decrementing product: {$product->id}, quantity: {$product->pivot->quantity}");
+                $product->decrement('quantity', $product->pivot->quantity);
+            }
+        });
+    }
 }

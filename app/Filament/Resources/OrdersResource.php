@@ -71,16 +71,17 @@ public static function form(Form $form): Form
 
             Select::make('status')
                 ->options([
-                    'order'     => 'Order',
-                    'diproses'  => 'Diproses',
-                    'selesai'   => 'Selesai',
+                    'Menunggu Pembayaran' => 'Menunggu Pembayaran',
+                    'Sedang Diproses'     => 'Sedang Diproses',
+                    'Dikirim'             => 'Dikirim', 
+                    'Selesai'             => 'Selesai',
+                    'Dibatalkan'          => 'Dibatalkan',
                 ])
                 ->required(),
 
             Repeater::make('products')
                 ->label('Daftar Produk Dipesan')
-                    ->reactive()
-                    ->required()                               
+                    ->reactive()                               
                     ->dehydrated()
                 ->schema([
                     Select::make('product_id')
@@ -165,19 +166,37 @@ public static function form(Form $form): Form
                     ->searchable()->sortable(),
                 TextColumn::make('status')
                     ->label('Status')
-                    ->searchable()->sortable(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Menunggu Pembayaran' => 'warning',
+                        'Sedang Diproses'     => 'info',
+                        'Dikirim'             => 'primary',
+                        'Selesai'             => 'success', 
+                        'Dibatalkan'          => 'danger',
+                        default               => 'gray',
+                    })
+                ->searchable()->sortable(),
                 TextColumn::make('total_price')
                     ->label('Total Harga')
+                    ->money('IDR')
                     ->searchable()->sortable(),                
                 TextColumn::make('created_by')
                     ->label('Staff')
                     ->searchable()->sortable(),
                 TextColumn::make('created_at')
                     ->label('Tanggal')
+                    ->dateTime('d/m/Y H:i')
                     ->searchable()->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'Menunggu Pembayaran' => 'Menunggu Pembayaran',
+                        'Sedang Diproses'     => 'Sedang Diproses',
+                        'Dikirim'             => 'Dikirim',
+                        'Selesai'             => 'Selesai',
+                        'Dibatalkan'          => 'Dibatalkan',
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

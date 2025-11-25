@@ -44,5 +44,6 @@ Route::post('/midtrans/token', [OrderController::class, 'createSnapToken']);
 Route::post('/midtrans/notification', [OrderController::class, 'handleNotification']);
 Route::post('/midtrans/callback', [OrderController::class, 'handleNotification']);
 Route::middleware('auth:sanctum')->get('/orders/me', [OrderController::class, 'userOrders']);
+Route::middleware('auth:sanctum')->put('/orders/{id}', [OrderController::class, 'update']);
 
 
