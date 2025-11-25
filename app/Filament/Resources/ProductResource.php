@@ -43,10 +43,8 @@ class ProductResource extends Resource
                     ->required(),
                 TextInput::make('price'),
 
-                // Tambahkan field upload / URL PNG di sini 👇
                 FileUpload::make('url_png')
-                    ->label('Product Image (PNG)')
-                    ->image()
+                    ->label('Image')
                     ->imagePreviewHeight('150')
                     ->directory('images')
                     ->nullable()

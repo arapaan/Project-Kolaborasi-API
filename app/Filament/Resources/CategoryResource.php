@@ -34,16 +34,18 @@ class CategoryResource extends Resource
                     ->required(),
                 Select::make('business_id')
                     ->label('Business')
-                    ->options(Business::all()
-                        ->pluck('name_company', 'id')
-                        ->map(fn ($label) => $label ?? '-')
+                    ->options(
+                        Business::all()
+                            ->pluck('name_company', 'id')
+                            ->map(fn($label) => $label ?? '-')
                     )
                     ->required(),
                 Select::make('parent_id')
                     ->label('Parent')
-                    ->options(ModelsCategory::all()
-                        ->pluck('name', 'id')
-                        ->map(fn ($label) => $label ?? '-')
+                    ->options(
+                        ModelsCategory::all()
+                            ->pluck('name', 'id')
+                            ->map(fn($label) => $label ?? '-')
                     ),
             ]);
     }
@@ -61,7 +63,7 @@ class CategoryResource extends Resource
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->sortable(),                    
+                    ->sortable(),
             ])
             ->filters([
                 //
