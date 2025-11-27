@@ -30,8 +30,8 @@ class AdminPanelProvider extends PanelProvider
             // ->viteTheme('resources/css/filament.css')
             ->login()
             ->brandName('') #letak Menambahkan Logo   
-            ->brandLogo(asset('images/Logo_Web.png'))
-            ->brandLogoHeight('2 rem')
+            ->brandLogo(asset('storage/images/Logo_Web.png'))
+            ->brandLogoHeight('7rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
