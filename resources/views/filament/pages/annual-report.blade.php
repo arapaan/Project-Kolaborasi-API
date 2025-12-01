@@ -2,17 +2,34 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Tahunan {{ $year }}</title>
+    <title>{{ $title ?? 'Laporan Tahunan' }}</title>
     <style>
         body { font-family: sans-serif; font-size: 12px; }
         h1 { text-align: center; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #000; padding: 6px; text-align: left; }
         th { background: #f0f0f0; }
+        .info-box { margin: 10px 0; padding: 8px; background: #f8f9fa; border-left: 4px solid #007bff; }
     </style>
 </head>
 <body>
-    <h1>Laporan Tahunan {{ $year }}</h1>
+    <h1>{{ $title ?? 'Laporan Tahunan' }} {{ $year }}</h1>
+
+    @if(isset($selectedMonths) && count($selectedMonths) > 0 && count($selectedMonths) < 12)
+    <div class="info-box">
+        <strong>Periode Laporan:</strong> 
+        @php
+            $monthNames = [
+                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+                5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+                9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+            ];
+            $firstMonth = $monthNames[min($selectedMonths)];
+            $lastMonth = $monthNames[max($selectedMonths)];
+        @endphp
+        {{ $firstMonth }} - {{ $lastMonth }} {{ $year }}
+    </div>
+    @endif
 
     <p><strong>Total Pendapatan:</strong> Rp {{ number_format($data['total_revenue'], 0, ',', '.') }}</p>
     <p><strong>Total Customer:</strong> {{ $data['total_customers'] }}</p>
@@ -22,8 +39,16 @@
     <table>
         <tr><th>Bulan</th><th>Total Pendapatan</th></tr>
         @foreach ($data['monthly_revenue'] as $row)
+            @php
+                $monthNames = [
+                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+                    5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+                    9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                ];
+                $monthName = $monthNames[$row->month] ?? 'Bulan ' . $row->month;
+            @endphp
             <tr>
-                <td>{{ \Carbon\Carbon::create()->month($row->month)->translatedFormat('F') }}</td>
+                <td>{{ $monthName }}</td>
                 <td>Rp {{ number_format($row->total, 0, ',', '.') }}</td>
             </tr>
         @endforeach
